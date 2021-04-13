@@ -1,0 +1,363 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>PC configurations</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <h2>The list of configurations</h2>
+    <menu>
+        <ul class="navbar navbar-inverse">
+            <li role="presentation">
+                <a href="./Index.html">Home</a>
+            </li>
+        </ul>
+    </menu>
+    <form name="userForm">
+        <input type="hidden" name="id" value="0" />
+        <div class="form-group col-md-5">
+            <label for="name">Name:</label>
+            <input class="form-control" name="name" />
+        </div>
+        <div class="form-group col-md-5">
+            <label for="power">Power:</label>
+            <input class="form-control" name="power" type="number" />
+        </div>
+        <div class="form-group col-md-5">
+            <label for="ProcessorId">Processor:</label>
+            <select class="form-control">
+   
+            </select>
+            <!--<input class="form-control" name="ProcessorId" />-->
+        </div>
+        <div class="form-group col-md-5">
+            <label for="VideoCardId">Video Card:</label>
+            <select class="form-control">
+                
+            </select>
+            <!--<input class="form-control" name="VideoCardId" />-->
+        </div>
+        <div class="form-group col-md-5">
+            <label for="MotherboardId">Motherboard:</label>
+            <select class="form-control">
+                
+            </select>
+            <!--<input class="form-control" name="MotherboardId" />-->
+        </div>
+        <div class="form-group col-md-5">
+            <label for="CoolingId">Cooling:</label>
+            <select class="form-control">
+                
+            </select>
+            <!--<input class="form-control" name="CoolingId" />-->
+        </div>
+        <div class="form-group col-md-5">
+            <label for="RAMId">RAM:</label>
+            <select class="form-control">
+                
+            </select>
+            <!--<input class="form-control" name="RAMId" />-->
+        </div>
+        <div class="form-group col-md-5">
+            <label for="SSDId">SSD:</label>
+            <select class="form-control">
+                
+            </select>
+            <!--<input class="form-control" name="SSDId" />-->
+        </div>
+        <div class="form-group col-md-5">
+            <label for="HardDriveId">Hard Drive:</label>
+            <select class="form-control">
+                
+            </select>
+            <!--<input class="form-control" name="HardDriveId" />-->
+        </div>
+        <div class="form-group col-md-5">
+            <label for="PowerSupplyId">Power Supply:</label>
+            <select class="form-control">
+                
+            </select>
+            <!--<input class="form-control" name="PowerSupplyId" />-->
+        </div>
+        <div class="form-group col-md-5">
+            <label for="SoundCardId">Sound Card:</label>
+            <select class="form-control">
+                
+            </select>
+            <!--<input class="form-control" name="SoundCardId" />-->
+        </div>
+        <div class="form-group col-md-5">
+            <label for="NetworkAdapterId">Network Adapter:</label>
+            <select class="form-control">
+                
+            </select>
+            <!--<input class="form-control" name="NetworkAdapterId" />-->
+        </div>
+        <div class="panel-body">
+            <button type="submit" id="submit" class="btn btn-primary">Save</button>
+            <a id="reset" class="btn btn-primary">Reset</a>
+        </div>
+    </form>
+    <table class="table table-condensed table-striped  col-md-6">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <!--<th>Power</th>-->
+                <th>Processor</th>
+                <th>Video Card</th>
+                <th>Motherboard</th>
+                <th>Cooling</th>
+                <th>RAM</th>
+                <th>SSD</th>
+                <th>Hard Drive</th>
+                <th>Power Supply</th>
+                <th>Sound Card</th>
+                <th>Network Adapter</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <script>
+        // Получение всех пользователей
+        async function GetConfigurators() {
+            // отправляет запрос и получаем ответ
+            const response = await fetch("/api/Configurators", {
+                method: "GET",
+                headers: { "Accept": "application/json" }
+            });
+            // если запрос прошел нормально
+            if (response.ok === true) {
+                // получаем данные
+                const configurators = await response.json();
+                let rows = document.querySelector("tbody");
+                configurators.forEach(configurator => {
+                    // добавляем полученные элементы в таблицу
+                    rows.append(row(configurator));
+                });
+            }
+        }
+        // Получение одного пользователя
+        async function GetConfigurator(id) {
+            const response = await fetch("/api/Configurators/" + id, {
+                method: "GET",
+                headers: { "Accept": "application/json" }
+            });
+            if (response.ok === true) {
+                const configurator = await response.json();
+                const form = document.forms["userForm"];
+                form.elements["id"].value = configurator.id;
+                form.elements["name"].value = configurator.name;
+                //form.elements["power"].value = configurator.power;
+                form.elements["ProcessorId"].value = configurator.ProcessorId;
+                form.elements["VideoCardId"].value = configurator.VideoCardId;
+                form.elements["MotherboardId"].value = configurator.MotherboardId;
+                form.elements["CoolingId"].value = configurator.CoolingId;
+                form.elements["RAMId"].value = configurator.RAMId;
+                form.elements["SSDId"].value = configurator.SSDId;
+                form.elements["HardDriveId"].value = configurator.HardDriveId;
+                form.elements["PowerSupplyId"].value = configurator.PowerSupplyId;
+                form.elements["SoundCardId"].value = configurator.SoundCardId;
+                form.elements["NetworkAdapterId"].value = configurator.NetworkAdapterId;
+            }
+        }
+        // Добавление пользователя
+        async function CreateConfigurator(configuratorName, /*configuratorPower,*/ configuratorProcessorId, configuratorVideoCardId, configuratorMotherboardId, configuratorCoolingId,
+            configuratorRAMId, configuratorSSDId, configuratorHardDriveId, configuratorPowerSupplyId, configuratorSoundCardId, configuratorNetworkAdapterId) {
+
+            const response = await fetch("api/Configurators", {
+                method: "POST",
+                headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    name: configuratorName,
+                    //power: parseInt(configuratorPower, 10),
+                    ProcessorId: parseInt(configuratorProcessorId, 10),
+                    VideoCardId: parseInt(configuratorVideoCardId, 10),
+                    MotherboardId: parseInt(configuratorMotherboardId, 10),
+                    CoolingId: parseInt(configuratorCoolingId, 10),
+                    RAMId: parseInt(configuratorRAMId, 10),
+                    SSDId: parseInt(configuratorSSDId, 10),
+                    HardDriveId: parseInt(configuratorHardDriveId, 10),
+                    PowerSupplyId: parseInt(configuratorPowerSupplyId, 10),
+                    SoundCardId: parseInt(configuratorSoundCardId, 10),
+                    NetworkAdapterId: parseInt(configuratorNetworkAdapterId, 10)
+                })
+            });
+            if (response.ok === true) {
+                const configurator = await response.json();
+                reset();
+                document.querySelector("tbody").append(row(configurator));
+            }
+        }
+        // Изменение пользователя
+        async function EditConfigurator(configuratorName, /*configuratorPower,*/ configuratorProcessorId, configuratorVideoCardId, configuratorMotherboardId, configuratorCoolingId,
+            configuratorRAMId, configuratorSSDId, configuratorHardDriveId, configuratorPowerSupplyId, configuratorSoundCardId, configuratorNetworkAdapterId) {
+            const response = await fetch("api/Configurators", {
+                method: "PUT",
+                headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    id: parseInt(configuratorId, 10),
+                    name: configuratorName,
+                    //power: parseInt(configuratorPower, 10),
+                    ProcessorId: parseInt(configuratorProcessorId, 10),
+                    VideoCardId: parseInt(configuratorVideoCardId, 10),
+                    MotherboardId: IdparseInt(configuratorMotherboardId, 10),
+                    CoolingId: parseInt(configuratorCoolingId, 10),
+                    RAMId: parseInt(configuratorRAMId, 10),
+                    SSDId: parseInt(configuratorSSDId, 10),
+                    HardDriveId: parseInt(configuratorHardDriveId, 10),
+                    PowerSupplyId: parseInt(configuratorPowerSupplyId, 10),
+                    SoundCardId: parseInt(configuratorSoundCardId, 10),
+                    NetworkAdapterId: parseInt(configuratorNetworkAdapterId, 10)
+                })
+            });
+            if (response.ok === true) {
+                const configurator = await response.json();
+                reset();
+                document.querySelector("tr[data-rowid='" + configurator.id + "']").replaceWith(row(configurator));
+            }
+        }
+        // Удаление пользователя
+        async function DeleteConfigurator(id) {
+            const response = await fetch("/api/Configurators/" + id, {
+                method: "DELETE",
+                headers: { "Accept": "application/json" }
+            });
+            if (response.ok === true) {
+                const configurator = await response.json();
+                document.querySelector("tr[data-rowid='" + configurator.id + "']").remove();
+            }
+        }
+
+        // сброс формы
+        function reset() {
+            const form = document.forms["userForm"];
+            form.reset();
+            form.elements["id"].value = 0;
+        }
+        // создание строки для таблицы
+        function row(configurator) {
+
+            const tr = document.createElement("tr");
+            tr.setAttribute("data-rowid", configurator.id);
+
+            const idTd = document.createElement("td");
+            idTd.append(configurator.id);
+            tr.append(idTd);
+
+            const nameTd = document.createElement("td");
+            nameTd.append(configurator.name);
+            tr.append(nameTd);
+
+            //const powerTd = document.createElement("td");
+            //powerTd.append(configurator.power);
+            //tr.append(powerTd);
+
+            const processorTd = document.createElement("td");
+            processorTd.append(configurator.ProcessorId);
+            tr.append(processorTd);
+
+            const videoCardTd = document.createElement("td");
+            videoCardTd.append(configurator.VideoCardId);
+            tr.append(videoCardTd);
+
+            const motherboardTd = document.createElement("td");
+            motherboardTd.append(configurator.MotherboardId);
+            tr.append(motherboardTd);
+
+            const coolingTd = document.createElement("td");
+            coolingTd.append(configurator.CoolingId);
+            tr.append(coolingTd);
+
+            const RAMTd = document.createElement("td");
+            RAMTd.append(configurator.RAMId);
+            tr.append(RAMTd);
+
+            const SSDTd = document.createElement("td");
+            SSDTd.append(configurator.SSDId);
+            tr.append(SSDTd);
+
+            const hardDriveTd = document.createElement("td");
+            hardDriveTd.append(configurator.HardDriveId);
+            tr.append(hardDriveTd);
+
+            const powerSupplyTd = document.createElement("td");
+            powerSupplyTd.append(configurator.PowerSupplyId);
+            tr.append(powerSupplyTd);
+
+            const soundCardTd = document.createElement("td");
+            soundCardTd.append(configurator.SoundCardId);
+            tr.append(soundCardTd);
+
+            const networkAdapterTd = document.createElement("td");
+            networkAdapterTd.append(configurator.NetworkAdapterId);
+            tr.append(networkAdapterTd);
+
+            const linksTd = document.createElement("td");
+
+            const editLink = document.createElement("a");
+            editLink.setAttribute("data-id", configurator.id);
+            editLink.setAttribute("style", "cursor:pointer;padding:15px;");
+            editLink.append("Изменить");
+            editLink.addEventListener("click", e => {
+
+                e.preventDefault();
+                GetConfigurator(configurator.id);
+            });
+            linksTd.append(editLink);
+
+            const removeLink = document.createElement("a");
+            removeLink.setAttribute("data-id", configurator.id);
+            removeLink.setAttribute("style", "cursor:pointer;padding:15px;");
+            removeLink.append("Удалить");
+            removeLink.addEventListener("click", e => {
+
+                e.preventDefault();
+                DeleteConfigurator(configurator.id);
+            });
+
+            linksTd.append(removeLink);
+            tr.appendChild(linksTd);
+
+            return tr;
+        }
+        // сброс значений формы
+        document.getElementById("reset").click(function (e) {
+
+            e.preventDefault();
+            reset();
+        })
+
+        // отправка формы
+        document.forms["userForm"].addEventListener("submit", e => {
+            e.preventDefault();
+            const form = document.forms["userForm"];
+            const id = form.elements["id"].value;
+            const name = form.elements["name"].value;
+            //const power = form.elements["power"].value;
+            const ProcessorId = form.elements["ProcessorId"].value;
+            const VideoCardId = form.elements["VideoCardId"].value;
+            const MotherboardId = form.elements["MotherboardId"].value;
+            const CoolingId = form.elements["CoolingId"].value;
+            const RAMId = form.elements["RAMId"].value;
+            const SSDId = form.elements["SSDId"].value;
+            const HardDriveId = form.elements["HardDriveId"].value;
+            const PowerSupplyId = form.elements["PowerSupplyId"].value;
+            const SoundCardId = form.elements["SoundCardId"].value;
+            const NetworkAdapterId = form.elements["NetworkAdapterId"].value;
+            if (id)
+                CreateConfigurator(name, /*power,*/ ProcessorId, VideoCardId, MotherboardId, CoolingId, RAMId, SSDId, HardDriveId, PowerSupplyId, SoundCardId, NetworkAdapterId);
+            else
+                EditConfigurator(id, name, /*power,*/ ProcessorId, VideoCardId, MotherboardId, CoolingId, RAMId, SSDId, HardDriveId, PowerSupplyId, SoundCardId, NetworkAdapterId);
+        });
+
+        // загрузка пользователей
+        GetConfigurators();
+
+    </script>
+</body>
+</html>

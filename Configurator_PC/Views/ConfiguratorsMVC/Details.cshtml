@@ -1,0 +1,84 @@
+﻿@model Configurator_PC.Models.Configurator
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Configurator</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Processor)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Processor.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.VideoCard)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.VideoCard.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Motherboard)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Motherboard.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Cooling)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Cooling.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.RAM)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.RAM.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SSD)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SSD.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.HardDrive)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.HardDrive.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PowerSupply)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PowerSupply.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SoundCard)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SoundCard.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NetworkAdapter)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NetworkAdapter.Name)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -1,0 +1,70 @@
+﻿@model Configurator_PC.Models.Configurator
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Configurator</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Processor" class="control-label"></label>
+                <select asp-for="ProcessorId" class ="form-control" asp-items="ViewBag.ProcessorId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="VideoCard" class="control-label"></label>
+                <select asp-for="VideoCardId" class ="form-control" asp-items="ViewBag.VideoCardId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Motherboard" class="control-label"></label>
+                <select asp-for="MotherboardId" class ="form-control" asp-items="ViewBag.MotherboardId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Cooling" class="control-label"></label>
+                <select asp-for="CoolingId" class ="form-control" asp-items="ViewBag.CoolingId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="RAM" class="control-label"></label>
+                <select asp-for="RAMId" class ="form-control" asp-items="ViewBag.RAMId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="SSD" class="control-label"></label>
+                <select asp-for="SSDId" class ="form-control" asp-items="ViewBag.SSDId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="HardDrive" class="control-label"></label>
+                <select asp-for="HardDriveId" class ="form-control" asp-items="ViewBag.HardDriveId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="PowerSupply" class="control-label"></label>
+                <select asp-for="PowerSupplyId" class ="form-control" asp-items="ViewBag.PowerSupplyId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="SoundCard" class="control-label"></label>
+                <select asp-for="SoundCardId" class ="form-control" asp-items="ViewBag.SoundCardId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="NetworkAdapter" class="control-label"></label>
+                <select asp-for="NetworkAdapterId" class ="form-control" asp-items="ViewBag.NetworkAdapterId"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

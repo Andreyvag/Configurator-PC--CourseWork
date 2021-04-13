@@ -1,0 +1,233 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>PC configurations</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <h2>The list of Sound Cards</h2>
+    <menu>
+        <ul class="navbar navbar-inverse">
+            <li role="presentation">
+                <a href="./Index.html">Home</a>
+            </li>
+            <li role="presentation">
+                <a href="./processors.html">Processors</a>
+            </li>
+            <li role="presentation">
+                <a href="./videoCards.html">Video Cards</a>
+            </li>
+            <li role="presentation">
+                <a href="./motherboards.html">Motherboards</a>
+            </li>
+            <li role="presentation">
+                <a href="./coolings.html">Coolings</a>
+            </li>
+            <li role="presentation">
+                <a href="./ram.html">RAM</a>
+            </li>
+            <li role="presentation">
+                <a href="./ssd.html">SSD</a>
+            </li>
+            <li role="presentation">
+                <a href="./hardDrive.html">Hard Drive</a>
+            </li>
+            <li role="presentation">
+                <a href="./powerSupplies.html">Power Supplies</a>
+            </li>
+            <li role="presentation">
+                <a href="./networkAdapters.html">Network Adapters</a>
+            </li>
+        </ul>
+    </menu>
+    <table class="table table-condensed table-striped  col-md-6">
+        <thead><tr><th>Id</th><th>Name</th><th>Price</th><th>Power</th><th></th></tr></thead>
+        <tbody>
+        </tbody>
+    </table>
+    <form name="userForm">
+        <input type="hidden" name="id" value="0" />
+        <div class="form-group col-md-5">
+            <label for="name">Name:</label>
+            <input class="form-control" name="name" />
+        </div>
+        <div class="form-group col-md-5">
+            <label for="price">Price:</label>
+            <input class="form-control" name="price" type="number" />
+        </div>
+        <div class="form-group col-md-5">
+            <label for="power">Power:</label>
+            <input class="form-control" name="power" type="number" />
+        </div>
+        <div class="panel-body">
+            <button type="submit" id="submit" class="btn btn-primary">Save</button>
+            <a id="reset" class="btn btn-primary">Reset</a>
+        </div>
+    </form>
+    <script>
+        // Получение всех пользователей
+        async function GetSoundCards() {
+            // отправляет запрос и получаем ответ
+            const response = await fetch("/api/SoundCards", {
+                method: "GET",
+                headers: { "Accept": "application/json" }
+            });
+            // если запрос прошел нормально
+            if (response.ok === true) {
+                // получаем данные
+                const SoundCards = await response.json();
+                let rows = document.querySelector("tbody");
+                SoundCards.forEach(SoundCard => {
+                    // добавляем полученные элементы в таблицу
+                    rows.append(row(SoundCard));
+                });
+            }
+        }
+        // Получение одного пользователя
+        async function GetSoundCard(id) {
+            const response = await fetch("/api/SoundCards/" + id, {
+                method: "GET",
+                headers: { "Accept": "application/json" }
+            });
+            if (response.ok === true) {
+                const SoundCard = await response.json();
+                const form = document.forms["userForm"];
+                form.elements["id"].value = SoundCard.id;
+                form.elements["name"].value = SoundCard.name;
+                form.elements["price"].value = SoundCard.price;
+                form.elements["power"].value = SoundCard.power;
+            }
+        }
+        // Добавление пользователя
+        async function CreateSoundCard(SoundCardName, SoundCardPrice, SoundCardPower) {
+
+            const response = await fetch("api/SoundCards", {
+                method: "POST",
+                headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    name: SoundCardName,
+                    price: parseInt(SoundCardPrice, 10),
+                    power: parseInt(SoundCardPower, 10)
+                })
+            });
+            if (response.ok === true) {
+                const SoundCard = await response.json();
+                reset();
+                document.querySelector("tbody").append(row(SoundCard));
+            }
+        }
+        // Изменение пользователя
+        async function EditSoundCard(SoundCardId, SoundCardName, SoundCardPrice, SoundCardPower) {
+            const response = await fetch("api/SoundCards", {
+                method: "PUT",
+                headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    id: parseInt(SoundCardId, 10),
+                    name: SoundCardName,
+                    price: parseInt(SoundCardPrice, 10),
+                    power: parseInt(SoundCardPower, 10)
+                })
+            });
+            if (response.ok === true) {
+                const SoundCard = await response.json();
+                reset();
+                document.querySelector("tr[data-rowid='" + SoundCard.id + "']").replaceWith(row(SoundCard));
+            }
+        }
+        // Удаление пользователя
+        async function DeleteSoundCard(id) {
+            const response = await fetch("/api/SoundCards/" + id, {
+                method: "DELETE",
+                headers: { "Accept": "application/json" }
+            });
+            if (response.ok === true) {
+                const SoundCard = await response.json();
+                document.querySelector("tr[data-rowid='" + SoundCard.id + "']").remove();
+            }
+        }
+
+        // сброс формы
+        function reset() {
+            const form = document.forms["userForm"];
+            form.reset();
+            form.elements["id"].value = 0;
+        }
+        // создание строки для таблицы
+        function row(SoundCard) {
+
+            const tr = document.createElement("tr");
+            tr.setAttribute("data-rowid", SoundCard.id);
+
+            const idTd = document.createElement("td");
+            idTd.append(SoundCard.id);
+            tr.append(idTd);
+
+            const nameTd = document.createElement("td");
+            nameTd.append(SoundCard.name);
+            tr.append(nameTd);
+
+            const priceTd = document.createElement("td");
+            priceTd.append(SoundCard.price);
+            tr.append(priceTd);
+
+            const powerTd = document.createElement("td");
+            powerTd.append(SoundCard.power);
+            tr.append(powerTd);
+
+            const linksTd = document.createElement("td");
+
+            const editLink = document.createElement("a");
+            editLink.setAttribute("data-id", SoundCard.id);
+            editLink.setAttribute("style", "cursor:pointer;padding:15px;");
+            editLink.append("");
+            editLink.addEventListener("click", e => {
+
+                e.preventDefault();
+                GetSoundCard(SoundCard.id);
+            });
+            linksTd.append(editLink);
+
+            const removeLink = document.createElement("a");
+            removeLink.setAttribute("data-id", SoundCard.id);
+            removeLink.setAttribute("style", "cursor:pointer;padding:15px;");
+            removeLink.append("");
+            removeLink.addEventListener("click", e => {
+
+                e.preventDefault();
+                DeleteSoundCard(SoundCard.id);
+            });
+
+            linksTd.append(removeLink);
+            tr.appendChild(linksTd);
+
+            return tr;
+        }
+        // сброс значений формы
+        document.getElementById("reset").click(function (e) {
+
+            e.preventDefault();
+            reset();
+        })
+
+        // отправка формы
+        document.forms["userForm"].addEventListener("submit", e => {
+            e.preventDefault();
+            const form = document.forms["userForm"];
+            const id = form.elements["id"].value;
+            const name = form.elements["name"].value;
+            const price = form.elements["price"].value;
+            const power = form.elements["power"].value;
+            if (id)
+                CreateSoundCard(name, price, power);
+            else
+                EditSoundCard(id, name, price, power);
+        });
+
+        // загрузка пользователей
+        GetSoundCards();
+
+    </script>
+</body>
+</html>
